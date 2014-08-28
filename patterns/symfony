@@ -5,15 +5,11 @@ SYMFONY_LOG %{SYMFONY_LOG_TYPE:log_type}\.%{SYMFONY_LOG_LEVEL:log_level}
 SYMFONY_PARAMETER "[^"]*":( )?"[^"]*"
 SYMFONY_PARAMETERS (%{SYMFONY_PARAMETER}(, )?)*
 SYMFONY_CONTEXT {.*}
-SYMFONY_REQUEST_METHOD GET|POST
+SYMFONY_REQUEST_METHOD GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT
 SYMFONY_REQUEST_PARAMETERS {"url":"%{GREEDYDATA:request_url}","ip":"%{IP:request_ip}","http_method":"%{SYMFONY_REQUEST_METHOD:request_method}"}
 
 SYMFONY_REQUEST_INFO Matched route "%{GREEDYDATA:route}" \(parameters: %{SYMFONY_PARAMETERS:parameters}\)
 SYMFONY_REQUEST_ERROR %{GREEDYDATA:exception}: %{GREEDYDATA:exception_message} \(uncaught exception\) at %{GREEDYDATA:exception_file} line %{NUMBER:exception_file_line}
-SYMFONY_APP_INFO_USER_LOGIN Zalogowano użytkownika: '%{GREEDYDATA:user}'(, IP: (%{IP:request_ip}|-), Strefa czasowa: %{GREEDYDATA:user_timezone})?;
-SYMFONY_APP_INFO_USER_REGISTER Zarejestrowano użytkownika: '%{GREEDYDATA:user}'(, IP: (%{IP:request_ip}|-), Strefa czasowa: %{GREEDYDATA:user_timezone})?;
-SYMFONY_APP_INFO_BUG_REPORT Użytkownik '%{GREEDYDATA:user}' wysłał zgłoszenie błędu ze strony %{GREEDYDATA:bug_report_url};
-SYMFONY_APP_INFO_EXERCISE (Submit|Save) exercise. User: '%{GREEDYDATA:user}', Attempt: '%{NUMBER:attempt_id}'
 SYMFONY_SECURITY_WARNING_USER_MISSING Username "%{GREEDYDATA:user}" could not be found.
 SYMFONY_SECURITY_INFO_USER_AUTHENTICATED User "%{GREEDYDATA:user}" has been authenticated successfully
 SYMFONY_SECURITY_DEBUG Username "%{GREEDYDATA:user}" was reloaded from user provider.
@@ -22,12 +18,11 @@ SYMFONY_EVENT_DEBUG_PROPAGATION_STOP Listener "%{GREEDYDATA:listener}" stopped p
 SYMFONY_DOCTRINE_DEBUG (?<=doctrine.DEBUG: ).*
 
 SYMFONY_REQUEST %{SYMFONY_REQUEST_INFO}|%{SYMFONY_REQUEST_ERROR}
-SYMFONY_APP %{SYMFONY_APP_INFO_USER_LOGIN}|%{SYMFONY_APP_INFO_USER_REGISTER}|%{SYMFONY_APP_INFO_BUG_REPORT}|%{SYMFONY_APP_INFO_EXERCISE}
 SYMFONY_SECURITY %{SYMFONY_SECURITY_WARNING_USER_MISSING}|%{SYMFONY_SECURITY_INFO_USER_AUTHENTICATED}|%{SYMFONY_SECURITY_DEBUG}
 SYMFONY_EVENT %{SYMFONY_EVENT_DEBUG_NOTIFICATION}|%{SYMFONY_EVENT_DEBUG_PROPAGATION_STOP}
 SYMFONY_DOCTRINE %{SYMFONY_DOCTRINE_DEBUG:doctrine_sql_query}
-SYMFONY_VARIOUS_INFO Write SecurityContext in the session|Reloading user from user provider.|Read SecurityContext from the session|Populated SecurityContext with an anonymous Token|Authentication request failed: Bad credentials|Access is denied (and user is neither anonymous, nor remember-me)
+SYMFONY_VARIOUS_INFO Write SecurityContext in the session|Reloading user from user provider.|Read SecurityContext from the session|Populated SecurityContext with an anonymous Token|Authentication request failed: Bad credentials|Access is denied (and user is neither anonymous, nor remember-me)|Authentication request failed: The presented password is invalid.
 
-SYMFONY_LOG_MESSAGE %{SYMFONY_REQUEST}|%{SYMFONY_APP}|%{SYMFONY_SECURITY}|%{SYMFONY_EVENT}|%{SYMFONY_DOCTRINE}|%{SYMFONY_VARIOUS_INFO:log_various_info}|%{GREEDYDATA:log_unparsed_message}
+SYMFONY_LOG_MESSAGE %{SYMFONY_REQUEST}|%{SYMFONY_SECURITY}|%{SYMFONY_EVENT}|%{SYMFONY_DOCTRINE}|%{SYMFONY_VARIOUS_INFO:log_various_info}|%{GREEDYDATA:log_unparsed_message}
 
 SYMFONY ^\[%{TIMESTAMP_ISO8601:date}\] %{SYMFONY_LOG}: %{SYMFONY_LOG_MESSAGE:log_message} (\[\]|%{SYMFONY_CONTEXT:log_context}) (\[\]|%{SYMFONY_REQUEST_PARAMETERS:log_request})
