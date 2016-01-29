@@ -10,7 +10,7 @@ SYMFONY_PARAMETER "[^"]*":( )?"[^"]*"
 SYMFONY_PARAMETERS (%{SYMFONY_PARAMETER}(, )?)*
 SYMFONY_CONTEXT {.*}
 SYMFONY_REQUEST_METHOD GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT
-SYMFONY_REQUEST_PARAMETERS {"url":"%{GREEDYDATA:request_url}","ip":"%{IP:request_ip}","http_method":"%{SYMFONY_REQUEST_METHOD:request_method}"}
+SYMFONY_REQUEST_PARAMETERS {"url":"%{GREEDYDATA:request_url}","ip":"%{IP:request_ip}","http_method":"%{SYMFONY_REQUEST_METHOD:request_method}"%{GREEDYDATA:additional_request_parameters}}
 
 SYMFONY_REQUEST_INFO Matched route "%{GREEDYDATA:route}" \(parameters: %{SYMFONY_PARAMETERS:parameters}\)
 SYMFONY_REQUEST_UNCAUGHT_EXCEPTION %{SYMFONY_EXCEPTION:exception}: %{VERYGREEDYDATA:exception_message} \(uncaught exception\) at %{VERYGREEDYDATA:exception_file} line %{NUMBER:exception_file_line}
